@@ -21,6 +21,9 @@ const connector = new teams.TeamsChatConnector({
 new builder.UniversalBot(connector, (session) => {
   const text = session.message.text
   const ticketId = (text.match(/([0-9]+)/) || [])[0]
+  if (!ticketId) {
+    session.send('I need a ticket ID to be useful :)')
+  }
   const ticketUrl = url.resolve(`https://${botConfig.ticketSystemUrl}`, ticketId)
   const ticketJson = url.resolve(
     `https://${botConfig.ticketSystemAPIKey}:dummy@${botConfig.ticketSystemUrl}`,
