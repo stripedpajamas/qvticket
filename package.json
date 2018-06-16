@@ -1,23 +1,17 @@
 {
-  "name": "hazel",
+  "name": "qvticket",
   "version": "1.0.0",
   "description": "The new Hazel",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Peter Squicciarini <stripedpajamas273@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "botbuilder": "^3.11.0",
-    "botbuilder-teams": "^0.1.6",
+    "botbuilder": "^3.15.0",
+    "botbuilder-teams": "^0.2.1",
     "express": "^4.16.2",
-    "faker": "^4.1.0",
     "node-fetch": "^2.1.2"
-  },
-  "devDependencies": {
-    "del": "^3.0.0",
-    "gulp": "^3.9.1",
-    "gulp-zip": "^4.0.0"
   }
 }
