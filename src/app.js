@@ -3,13 +3,19 @@ const builder = require('botbuilder')
 const teams = require('botbuilder-teams')
 const url = require('url')
 const fetch = require('node-fetch')
-const botConfig = config.get('bot')
+
+const botConfig = {
+  microsoftAppId: process.env.MICROSOFT_APP_ID,
+  microsoftAppPassword: process.env.MICROSOFT_APP_PASSWORD,
+  ticketSystemUrl: process.env.TICKET_SYSTEM_URL,
+  ticketSystemAPIKey: process.env.TICKET_SYSTEM_API_KEY
+}
 
 const app = express()
 
 const connector = new teams.TeamsChatConnector({
-  appId: process.env.MICROSOFT_APP_ID || botConfig.microsoftAppId,
-  appPassword: process.env.MICROSOFT_APP_PASSWORD || botConfig.microsoftAppPassword
+  appId: botConfig.microsoftAppId,
+  appPassword: botConfig.microsoftAppPassword
 })
 
 new builder.UniversalBot(connector, (session) => {
