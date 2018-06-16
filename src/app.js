@@ -1,21 +1,40 @@
-'use strict';
+const express = require('express')
+const builder = require('botbuilder')
+const teams = require('botbuilder-teams')
+const url = require('url')
+const fetch = require('node-fetch')
+const botConfig = config.get('bot')
 
-var express = require('express');
-var app = express();
+const app = express()
 
-// Adding tabs to our app. This will setup routes to various views
-var tabs = require('./tabs');
-tabs.setup(app);
+const connector = new teams.TeamsChatConnector({
+  appId: process.env.MICROSOFT_APP_ID || botConfig.microsoftAppId,
+  appPassword: process.env.MICROSOFT_APP_PASSWORD || botConfig.microsoftAppPassword
+})
 
-// Adding a bot to our app
-var bot = require('./bot');
-bot.setup(app);
+new builder.UniversalBot(connector, (session) => {
+  const text = session.message.text
+  const ticketId = (text.match(/([0-9]+)/) || [])[0]
+  const ticketUrl = url.resolve(`https://${botConfig.ticketSystemUrl}`, ticketId)
+  const ticketJson = url.resolve(
+    `https://${botConfig.ticketSystemAPIKey}:dummy@${botConfig.ticketSystemUrl}`,
+    `${ticketId}.json`
+  )
 
-// Adding a messaging extension to our app
-var messagingExtension = require('./messaging-extension');
-messagingExtension.setup();
+  fetch(ticketJson)
+  .then(res => res.json())
+  .then(json => {
+    session.send(`## [Ticket ${ticketId}: ${json.helpdesk_ticket.subject}](${ticketUrl})
+${json.helpdesk_ticket.description.substring(0, 300)}`)
+  })
+  .catch(e => {
+    console.log(e)
+    session.send(`[Ticket ${ticketId}](${ticketUrl})`)
+  })
+})
 
-// Start our nodejs app
-app.listen(process.env.PORT || 3333, function() {
-    console.log('App started listening on port 3333');
-});
+app.post('/api/messages', connector.listen())
+
+app.listen(process.env.PORT || 3333, () => {
+  console.log('App started listening on port 3333')
+})
