@@ -3,6 +3,11 @@ const builder = require('botbuilder')
 const teams = require('botbuilder-teams')
 const url = require('url')
 const fetch = require('node-fetch')
+const ninja = require('./ninja')
+
+if (process.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const botConfig = {
   microsoftAppId: process.env.MICROSOFT_APP_ID,
@@ -18,7 +23,7 @@ const connector = new teams.TeamsChatConnector({
   appPassword: botConfig.microsoftAppPassword
 })
 
-new builder.UniversalBot(connector, (session) => {
+const bot = new builder.UniversalBot(connector, (session) => {
   const text = session.message.text
   const ticketId = (text.match(/([0-9]+)/) || [])[0]
   if (!ticketId) {
@@ -47,3 +52,5 @@ app.post('/api/messages', connector.listen())
 app.listen(process.env.PORT || 3333, () => {
   console.log('App started listening on port 3333')
 })
+
+ninja.startListening()
