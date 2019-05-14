@@ -3,10 +3,6 @@ const fetch = require('node-fetch')
 const moment = require('moment-timezone')
 const mongo = require('./mongo')
 
-if (process.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const getTime = (t) => moment
   .tz(t, 'ddd, DD MMM YYYY HH:mm:ss', 'Europe/London')
   .clone()

@@ -16,8 +16,5 @@
     "mongodb": "^3.0.10",
     "ninja-rmm-api": "^2.0.0",
     "node-fetch": "^2.1.2"
-  },
-  "devDependencies": {
-    "dotenv": "^6.0.0"
   }
 }

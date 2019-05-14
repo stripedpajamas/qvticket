@@ -5,10 +5,6 @@ const url = require('url')
 const fetch = require('node-fetch')
 const ninja = require('./ninja')
 
-if (process.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const botConfig = {
   microsoftAppId: process.env.MICROSOFT_APP_ID,
   microsoftAppPassword: process.env.MICROSOFT_APP_PASSWORD,

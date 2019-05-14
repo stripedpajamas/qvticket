@@ -1,10 +1,6 @@
 const MongoClient = require('mongodb').MongoClient
 const assert = require('assert')
 
-if (process.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const uri = process.env.MONGO_URI
 const dbName = 'shuriken'
 const collectioName = 'alerts'
