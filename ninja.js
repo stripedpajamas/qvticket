@@ -7,7 +7,6 @@ const getTime = (t) => moment
   .tz(t, 'ddd, DD MMM YYYY HH:mm:ss', 'Europe/London')
   .clone()
   .tz('America/New_York')
-  .format('llll')
 
 const alertsHook = process.env.ALERTS_HOOK
 const alertMessage = (alert) => JSON.stringify(
@@ -22,7 +21,7 @@ const alertMessage = (alert) => JSON.stringify(
       "facts": [
         {
           "name": "Timestamp",
-          "value": `${getTime(alert.timestamp)}`
+          "value": `${getTime(alert.timestamp).format('llll')}`
         }
       ],
       "markdown": true
@@ -60,6 +59,8 @@ const retrieveLatestAlert = () => new Promise((resolve, reject) => {
 })
 
 const notifyTeams = (alert) => {
+  const hour = getTime(alert.timestamp).hour()
+  if (hour >= 17 || hour < 8) return
   fetch(alertsHook, {
     method: 'POST',
     body: alertMessage(alert)
